@@ -4,17 +4,15 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { UserFriend } from './user-friend.entity';
 
 @Entity()
-@Unique('unique_user', ['email'])
-export class User extends BaseEntity {
+export class UserPerson extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   email: string;
 
   @Column({ nullable: false })
@@ -24,5 +22,5 @@ export class User extends BaseEntity {
   isActive: boolean;
 
   @OneToMany(() => UserFriend, (userFriend) => userFriend.friend)
-  friends: User[];
+  friends: UserPerson[];
 }

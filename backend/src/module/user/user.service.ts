@@ -1,19 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entity/user/user.entity';
+import argon2 from 'argon2';
+import { IServiceResult } from '../../@types/common';
+import { ServiceErrorCode } from '../../constants/service-error';
+import { UserPerson } from '../../entity/user/user.entity';
+import { ServiceError } from '../../utility/custom-error/service-error';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(UserPerson)
+    private userRepository: Repository<UserPerson>,
   ) {}
 
-  findById(userId: string): Promise<User> {
+  async createUser({
+    email,
+    password,
+  }: UserPerson): Promise<IServiceResult<UserPerson, ServiceError>> {
+    try {
+      const user = new UserPerson();
+      user.email = email;
+      user.password = await argon2.hash(password);
+      this.userRepository.save(user);
+    } catch (e) {
+      console.error('createUser', e);
+      return {
+        data: null,
+        error: new ServiceError(ServiceErrorCode.DUPLICATE_FIELD, 'email'),
+      };
+    }
+  }
+
+  findById(userId: string): Promise<UserPerson> {
     return this.userRepository.findOne(userId);
   }
 
-  findByEmail(email: string): Promise<User> {
+  findByEmail(email: string): Promise<UserPerson> {
     return this.userRepository.findOne({ email });
   }
 }

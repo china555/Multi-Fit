@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { UserPerson } from '../user/user.entity';
 import { Team } from './team.entity';
 
 @Entity()
@@ -13,7 +13,7 @@ export class TeamMember {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User, (user) => user.id)
+  @OneToOne(() => UserPerson, (user) => user.id)
   @JoinColumn()
   member: number;
 

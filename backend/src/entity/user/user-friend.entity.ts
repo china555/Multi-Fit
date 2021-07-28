@@ -1,16 +1,16 @@
 import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
+import { UserPerson } from './user.entity';
 
 @Entity()
 export class UserFriend {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User, (user) => user.id)
+  @OneToOne(() => UserPerson, (user) => user.id)
   @JoinColumn()
-  user: User;
+  user: UserPerson;
 
-  @OneToOne(() => User, (user) => user.id)
+  @OneToOne(() => UserPerson, (user) => user.id)
   @JoinColumn()
-  friend: User;
+  friend: UserPerson;
 }

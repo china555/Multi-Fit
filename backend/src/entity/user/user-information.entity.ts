@@ -6,19 +6,16 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { UserAddress } from './user-address.entity';
-import { User } from './user.entity';
+import { UserPerson } from './user.entity';
 
 @Entity()
-@Unique('unique_user_info', ['displayName'])
 export class UserInformation extends UserAddress {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToOne(() => User, (user) => user.id, { cascade: true })
-  @JoinColumn()
+  @OneToOne(() => UserPerson, (user) => user.id, { cascade: true })
   user: number;
 
   @Column({ nullable: false })
@@ -27,7 +24,7 @@ export class UserInformation extends UserAddress {
   @Column({ nullable: false })
   lastname: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   displayName: string;
 
   @Column({ default: null })
