@@ -13,8 +13,9 @@ import { AppService } from './app.service';
       password:
         'd3518aabec9aabe740867258ced5707a4e7d8ea8f80197b1615d8f648f38917c',
       database: 'dca2hc1tdeurq5',
-      entities: ['dist/entity/**/*.entity.ts'],
+      entities: ['dist/entity/**/*.entity.js'],
       synchronize: process.env.NODE_ENV !== 'production',
+      dropSchema: process.env.NODE_ENV !== 'production',
       logging: true,
       ssl: {
         ca: process.env.SSL_CERT,
