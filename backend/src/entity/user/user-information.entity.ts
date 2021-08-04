@@ -16,6 +16,7 @@ export class UserInformation extends UserAddress {
   id: string;
 
   @OneToOne(() => UserPerson, (user) => user.id, { cascade: true })
+  @JoinColumn()
   user: number;
 
   @Column({ nullable: false })

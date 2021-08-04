@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import argon2 from 'argon2';
-import { IServiceResult } from '../../@types/common';
+import { ILogin, IServiceResult } from '../../@types/common';
 import { ServiceErrorCode } from '../../constants/service-error';
 import { UserPerson } from '../../entity/user/user.entity';
 import { ServiceError } from '../../utility/custom-error/service-error';
@@ -17,12 +17,17 @@ export class UserService {
   async createUser({
     email,
     password,
-  }: UserPerson): Promise<IServiceResult<UserPerson, ServiceError>> {
+  }: ILogin): Promise<IServiceResult<UserPerson, ServiceError>> {
     try {
       const user = new UserPerson();
       user.email = email;
       user.password = await argon2.hash(password);
-      this.userRepository.save(user);
+      const userResult = await this.userRepository.save(user);
+
+      return {
+        data: userResult,
+        error: null,
+      };
     } catch (e) {
       console.error('createUser', e);
       return {
